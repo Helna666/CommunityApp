@@ -1,4 +1,6 @@
+import 'package:easyreach/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'user_login.dart';
 
 class UserRegister extends StatefulWidget {
@@ -18,6 +20,8 @@ class _UserRegisterState
   final phoneController =
       TextEditingController();
   final passwordController =
+      TextEditingController();
+  final usernameController = 
       TextEditingController();
 
   bool obscure = true;
@@ -64,6 +68,11 @@ class _UserRegisterState
                   ),
                 ),
 
+                buildField(
+                  usernameController,
+                 "Username",
+                  Icons.person_outline,
+                ),
                 const SizedBox(height: 35),
 
                 buildField(
@@ -120,15 +129,45 @@ class _UserRegisterState
                   height: 55,
                   child:
                       ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              const UserLogin(),
-                        ),
-                      );
-                    },
+                  onPressed: () async {
+  final authProvider = Provider.of<AuthProvider>(
+    context,
+    listen: false,
+  );
+
+  bool success = await authProvider.registerUser(
+    fullName: nameController.text.trim(),
+    username: usernameController.text.trim(),
+    email: emailController.text.trim(),
+    phone: phoneController.text.trim(),
+    password: passwordController.text,
+  );
+
+  if (!mounted) return;
+
+  if (success) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Registration Successful"),
+      ),
+    );
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const UserLogin(),
+      ),
+    );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          authProvider.errorMessage ?? "Registration Failed",
+        ),
+      ),
+    );
+  }
+},
                     style:
                         ElevatedButton
                             .styleFrom(
