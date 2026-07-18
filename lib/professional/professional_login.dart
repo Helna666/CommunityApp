@@ -49,7 +49,6 @@ class _ProfessionalLoginState
                     height: 220,
                   ),
                 ),
-
                 const SizedBox(height: 35),
 
                 const Text(
