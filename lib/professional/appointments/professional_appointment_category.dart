@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../utils/app_colors.dart';
-
+import '../professional_home.dart';
 
 class ProfessionalAppointmentCategory extends StatelessWidget {
 
@@ -44,18 +44,23 @@ class ProfessionalAppointmentCategory extends StatelessWidget {
 
 
       appBar: AppBar(
-
-        title: Text(title),
-
-        backgroundColor: Colors.transparent,
-
-        elevation: 0,
-
-        foregroundColor: AppColors.heading,
-
-      ),
-
-
+  leading: IconButton(
+    icon: const Icon(Icons.arrow_back),
+    onPressed: () {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ProfessionalHome(),
+        ),
+        (route) => false,
+      );
+    },
+  ),
+  title: Text(title),
+  backgroundColor: Colors.transparent,
+  elevation: 0,
+  foregroundColor: AppColors.heading,
+),
 
       body: Container(
 
